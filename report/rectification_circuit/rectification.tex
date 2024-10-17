@@ -176,32 +176,129 @@ By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.6
  The machine works by the python code built, with SDK provided by \cite{digilent_analog_discovery}.
  The code for such frequency sweep experiment is denoted in \ref{Appendix: Codes}.
 
-\section{Results}
- The pr
-
+\section{Results and Conclusion}
+ The term drive voltage denotes the total voltage applied to the circuit, before rectified.
+ And, the term reaction voltage means the measured voltage after rectified across capacitor.
+ The performance of the DC filter can be measured by the difference of the max and min value of the reaction produced, conventionally called as ripple voltage.
+ The diode and the rest of the circuit capacitance is about few $\mathrm{pF}$, so that is totally negliable from the external capacity attatched.
  
 \begin{figure}[H]
-    \begin{subfigure}[b]{7cm}
+    \begin{subfigure}[b]{8cm}
         \centering
-        \includegraphics[width=7cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (0.0400).png}
+        \includegraphics[width=8cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (0.0400).png}
         \caption{}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{7cm}
+    \begin{subfigure}[b]{8cm}
       \centering
-      \includegraphics[width=7cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (100.0000).png}
+      \includegraphics[width=8cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (100.0000).png}
       \caption{}
   \end{subfigure}
   \hfill
   \centering
   \hfill
-    \caption{something
-     }
+    \caption{
+        The Voltage [V] - time [s] plot of the ripple circuit.
+        4.7 \#1 capacitor is used for both result.
+        (a) in drive frequency $0.04 \mathrm{Hz}$.
+        (b) in drive frequency $100.0 \mathrm{Hz}$.
+        The output signal is almost DC for high frequency, where the low frequency signal have ripple voltage.
+    }
     \label{fig: example figure}
-  \end{figure}
+\end{figure}
 
-\section{Conclusions}
-In this section, discuss the significance of your results in relation to what you proposed in the introduction.
+Fig. \ref{fig: example figure} shows the time series raw data of reaction and the drive voltage of capaciy $4.6 \mathrm{\mu F}$.
+Fig. \ref{fig: example figure} (a) is the data of drive frequency $0.04 \mathrm{Hz}$, and (b) is for the drive frequency $100.0 \mathrm{Hz}$
+As expected, the ripple voltage value gets lower when the frequency gets higher.
+There are asymmetry found for half period rectification, the reason for the error is discussed below (!ref todo)
+
+\begin{figure}[H]
+    \begin{subfigure}[b]{6cm}
+        \centering
+        \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_(1.17uF)_(20).png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{6cm}
+      \centering
+      \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_(1.57uF)_(20).png}
+      \caption{}
+  \end{subfigure}
+  \centering
+  \hfill
+    \caption{
+        The ripple voltage to the drive frequency of two different circuit capacitance.
+        (a) $1.17 \mathrm{\mu F}$, (b) $1.57 \mathrm{\mu F}$.
+        The error bar is calculated by the peak height differ from each period.
+        The figure of different kind of capacitance is provided in \ref{fig: log V-log f figure Supplementary}.
+    }
+    \label{fig: V-f figure}
+\end{figure}
+
+To observe the exact dependancy of the ripple voltage by the driving frequency, the plot of each capacitance required.
+Fig. \ref{fig: V-f figure}, for some results and the \ref{fig: V-f figure Supplementary} shows the direct plot of ripple voltage and the drive frequency in various kinds of capacitance value.
+The ripple voltage is almost 0 at high frequency, and increase fast near low frequency area, and peaks high over the working amplitude.
+The theory predicts the relation of the ripple voltage and the drive frequency as approximally $V_{\mathrm{rip}} = \frac{I}{f C}$.
+For the extremely low or high frequency, the approximation fails, the results should be considered as complex differential equation.
+We simulated the results, and denoted on (ref! todo)
+
+In the well performing area, the linear regresssion is applied for $\mathrm{log} V- \mathrm{log} f$ plot and its statics shown below.
+
+\begin{figure}[H]
+    \begin{subfigure}[b]{6cm}
+        \centering
+        \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_log_log_(1.17uF)_20.png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{6cm}
+      \centering
+      \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_log_log_(1.57uF)_20.png}
+      \caption{}
+  \end{subfigure}
+  \centering
+  \hfill
+    \caption{
+        The ripple voltage to the drive frequency of two different circuit capacitance in logarithmic scale is plotted.
+        The linear regression of the well performing area is also depicted.
+        (a) $1.17 \mathrm{\mu F}$, (b) $1.57 \mathrm{\mu F}$.
+        The error bar is calculated by the peak height differ from each period.
+        The figure of different kind of capacitance is provided in \ref{fig: V-f figure Supplementary}.
+    }
+    \label{fig: log V-log f figure}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c|c|c|c}
+        \textbf{C} & \textbf{a} & \textbf{b} & $\mathrm{R^2}$ \\ 
+        \hline
+        \hline
+        $1.17uF$ & $-1.04\pm0.01$ & $-1.84\pm0.01$ & $1.000$  \\
+        \hline
+        $1.57uF$ & $-1.04\pm0.01$ & $-2.11\pm0.01$ & $0.999$  \\
+        \hline
+        $2.35uF$ & $-1.05\pm0.01$ & $-2.53\pm0.01$ & $0.999$  \\
+        \hline
+        $4.7uF$ & $-1.089\pm0.02$ & $-3.30\pm0.02$ & $0.994$  \\
+        \hline
+        $100uF$ & $-2.16\pm0.21$ & $-10.85\pm0.21$ & $0.828$  \\
+        \hline
+    \end{tabular}
+    \caption{
+        The measured capacitance of each capacitor component.
+        The index is labeled by the factory value denoted in arbitrary order.
+    }
+    \label{table: linear regression of log log plot}
+\end{figure}
+
+
+\section{References}
+\bibliographystyle{plain} 
+\bibliography{recref}
+\end{multicols}
+\newpage
 
 \section{Appendix}
 \subsection{Codes for AD2}
@@ -253,9 +350,59 @@ def experiment(experiment_config):
 
     return total_results
 \end{lstlisting}
-\section{References}
-\bibliographystyle{plain} 
-\bibliography{recref}
 
-\end{multicols}
+\subsection{Supplementary}
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{5cm}
+    \centering
+    \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_(2.35uF)_(20).png}
+    \caption{}
+\end{subfigure}
+\begin{subfigure}[b]{5cm}
+    \centering
+    \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_(4.7uF)_(20).png}
+    \caption{}
+\end{subfigure}
+\begin{subfigure}[b]{5cm}
+    \centering
+    \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_(100uF)_(20).png}
+    \caption{}
+\end{subfigure}
+  \hfill
+  \centering
+  \hfill
+    \caption{
+        The ripple voltage to the drive frequency of two different circuit capacitance.
+        (a) $2.35 \mathrm{\mu F}$, (b) $4.7 \mathrm{\mu F}$, (c) $100 \mathrm{\mu F}$.
+        The error bar is calculated by the peak height differ from each period.
+        This is the supplementary figure of \ref{fig: V-f figure}.
+    }
+    \label{fig: V-f figure Supplementary}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{subfigure}[b]{5cm}
+        \centering
+        \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_log_log_(2.35uF)_20.png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{5cm}
+      \centering
+      \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_log_log_(4.7uF)_20.png}
+      \caption{}
+  \end{subfigure}
+  \hfill
+  \centering
+  \hfill
+    \caption{
+        The ripple voltage to the drive frequency of two different circuit capacitance in logarithmic scale is plotted.
+        The linear regression of the well performing area is also depicted.
+        (a) $2.35 \mathrm{\mu F}$, (b) $4.7 \mathrm{\mu F}$.
+        The error bar is calculated by the peak height differ from each period.
+        The figure of different kind of capacitance is provided in \ref{fig: log V-log f figure}.
+    }
+    \label{fig: log V-log f figure Supplementary}
+\end{figure}
 \end{document}
