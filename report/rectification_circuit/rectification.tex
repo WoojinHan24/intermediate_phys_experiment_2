@@ -10,6 +10,8 @@
 \usepackage{color}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{caption}
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{white}, 
@@ -106,12 +108,12 @@ In this experiment, the voltage drop across diodes plays a crucial role in the p
 \section{Experiment}
 \subsection{Apparatus}
 The rectification circuit is constructed by four diodes, working in AC voltage provided by Analog Discovery 2 (\cite{digilent_analog_discovery}).
-The frequency is varied from $0.02Hz$ to $200Hz$ in logarithmic scale, at 40 sampling points.
+The frequency is varied from $0.02 \mathrm{Hz}$ to $200 \mathrm{Hz}$ in logarithmic scale, at 40 sampling points.
 For each frequency experiment, the output voltage of exactly ten period of each drive voltage is measured.
-We wanted to modify the capacitance of the circuit, used 4 $4.7 \mu F$ and 1 $100 \mu F$ capacity capacitor.
+We wanted to modify the capacitance of the circuit, used 4 $4.7 \mu \mathrm{F}$ and 1 $100 \mu \mathrm{F}$ capacity capacitor.
 The serially connected capacitor is examined, five different situation is tested.
 True capacitance value of each component is measured by multimeter, and its result is presented at Fig. \ref{table: capacity data}.
-By the true value measured, the circuit capacity of $90.86 \mu F$, $4.622 \mu F$, $2.255 \mu F$, $1.478 \mu F$, and $1.115 \mu F$ be the circuit capacity condition of each experiments.
+By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.622 \mu \mathrm{F}$, $2.255 \mu \mathrm{F}$, $1.478 \mu \mathrm{F}$, and $1.115 \mu \mathrm{F}$ be the circuit capacity condition of each experiments.
 
 \begin{figure}[H]
     \centering
@@ -119,15 +121,15 @@ By the true value measured, the circuit capacity of $90.86 \mu F$, $4.622 \mu F$
         \textbf{Index} & \textbf{Measured Capacitance} \\ 
         \hline
         \hline
-        4.7 \#1 & $4.622 \pm 0.002 \mu F$ \\ 
+        4.7 \#1 & $4.622 \pm 0.002 \mu \mathrm{F}$ \\ 
         \hline
-        4.7 \#2 & $4.405 \pm 0.002 \mu F$ \\
+        4.7 \#2 & $4.405 \pm 0.002 \mu \mathrm{F}$ \\
         \hline
-        4.7 \#3 & $4.288 \pm 0.002 \mu F$ \\
+        4.7 \#3 & $4.288 \pm 0.002 \mu \mathrm{F}$ \\
         \hline
-        4.7 \#4 & $4.543 \pm 0.002 \mu F$ \\
+        4.7 \#4 & $4.543 \pm 0.002 \mu \mathrm{F}$ \\
         \hline
-        100 \#1 & $90.86 \pm 0.02 \mu F$ \\
+        100 \#1 & $90.86 \pm 0.02 \mu \mathrm{F}$ \\
         \hline
     \end{tabular}
     \caption{
@@ -147,8 +149,29 @@ By the true value measured, the circuit capacity of $90.86 \mu F$, $4.622 \mu F$
  The machine works by the python code built, with SDK provided by \cite{digilent_analog_discovery}.
  The code for such frequency sweep experiment is denoted in \ref{Appendix: Codes}.
 
-\section{Results and Conclusions}
-Matlab's calculation results are also taken into the consideration to compare with acquired data. The code used for the calculation is attached on the last page. (will be added)
+\section{Results}
+ The pr
+
+ 
+\begin{figure}[H]
+    \begin{subfigure}[b]{7cm}
+        \centering
+        \includegraphics[width=7cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (0.0400).png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{7cm}
+      \centering
+      \includegraphics[width=7cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (100.0000).png}
+      \caption{}
+  \end{subfigure}
+  \hfill
+  \centering
+  \hfill
+    \caption{something
+     }
+    \label{fig: example figure}
+  \end{figure}
 
 \section{Conclusions}
 In this section, discuss the significance of your results in relation to what you proposed in the introduction.

@@ -159,13 +159,13 @@ def fit_R_C_from_total_results(total_result):
 
     result = minimize(
         lambda x: total_eval(x[0], x[1]),
-        x0=[1, 1],
+        x0=[1e3, 1e3],
     )
 
     # evaluate_result(drive, time, reaction, *result.x, C, debug=True)
     # raise ()
 
-    return [*result.x]
+    return [result]
 
 
 C_list = [1.17 * 1e-6, 1.57 * 1e-6, 2.35 * 1e-6, 4.7 * 1e-6, 100 * 1e-6]
