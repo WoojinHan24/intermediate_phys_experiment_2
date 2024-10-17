@@ -6,7 +6,24 @@
 \usepackage{multicol}
 \usepackage{geometry}
 \usepackage{float}
+\usepackage{url}
 \usepackage{color}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{white}, 
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    captionpos=b,
+    numbers=left,
+    numbersep=5pt
+}
+\lstset{style=mystyle}
 \graphicspath{ {./images/} }
 
 \geometry{
@@ -113,21 +130,106 @@ V_{dc} = V_{p(in)} \left( 1 - \frac{1}{4f RC} \right)
 This relationship shows how the average DC voltage is slightly reduced due to the ripple effect. The analysis is essential for understanding the capacitor's smoothing role in rectification and how the choice of \( RC \) values influences output quality.
 
 
-\section{Methods}
-The rectification circuit is constructed by four diodes, working in AC voltage provided by Analog Discovery 2.
+\section{Experiment}
+\subsection{Apparatus}
+The rectification circuit is constructed by four diodes, working in AC voltage provided by Analog Discovery 2 (\cite{digilent_analog_discovery}).
 The frequency is varied from $0.02Hz$ to $200Hz$ in logarithmic scale, at 40 sampling points.
-For each frequency experiment, exactly ten period of 
+For each frequency experiment, the output voltage of exactly ten period of each drive voltage is measured.
+We wanted to modify the capacitance of the circuit, used 4 $4.7 \mu F$ and 1 $100 \mu F$ capacity capacitor.
+The serially connected capacitor is examined, five different situation is tested.
+True capacitance value of each component is measured by multimeter, and its result is presented at Fig. \ref{table: capacity data}.
+By the true value measured, the circuit capacity of $90.86 \mu F$, $4.622 \mu F$, $2.255 \mu F$, $1.478 \mu F$, and $1.115 \mu F$ be the circuit capacity condition of each experiments.
 
-\section{Results}
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c|c}
+        \textbf{Index} & \textbf{Measured Capacitance} \\ 
+        \hline
+        \hline
+        4.7 \#1 & $4.622 \pm 0.002 \mu F$ \\ 
+        \hline
+        4.7 \#2 & $4.405 \pm 0.002 \mu F$ \\
+        \hline
+        4.7 \#3 & $4.288 \pm 0.002 \mu F$ \\
+        \hline
+        4.7 \#4 & $4.543 \pm 0.002 \mu F$ \\
+        \hline
+        100 \#1 & $90.86 \pm 0.02 \mu F$ \\
+        \hline
+    \end{tabular}
+    \caption{
+        The measured capacitance of each capacitor component.
+        The index is labeled by the factory value denoted in arbitrary order.
+    }
+    \label{table: capacity data}
+\end{figure}
+
+\subsection{Methods}
+ Construct the circuit as (figure), and plug drive voltage to the input node respectively.
+ Connect the nodes between drive voltage in Channel 1, and output voltage in Channel 2 of Analog Discovery 2 Oscilloscope.
+ Turn on the sinosodic signal of $2.5V$ and modified frequency in order to the drive voltage, and wait for 1 second for the circuit to be saturated.
+ Measure $100$ points per period for sampling, for 10 period duration.
+ Grab the initial time data and construct time grid for each measured result.
+
+ The machine works by the python code built, with SDK provided by \cite{digilent_analog_discovery}.
+ The code for such frequency sweep experiment is denoted in \ref{Appendix: Codes}.
+
+\section{Results and Conclusions}
 Matlab's calculation results are also taken into the consideration to compare with acquired data. The code used for the calculation is attached on the last page. (will be added)
 
 \section{Conclusions}
 In this section, discuss the significance of your results in relation to what you proposed in the introduction.
 
-\section{Acknowledgements}
-The authors would like to acknowledge...
+\section{Appendix}
+\subsection{Codes for AD2}
+\label{Appendix: Codes}
+The code and relavent wrapper library is open to public in \cite{github}.
+\begin{lstlisting}[language=Python, caption={Python Code Example}]
+from pydwf import DwfLibrary
+from pydwf.utilities import openDwfDevice
+import numpy as np
+from libs.pydwf_wrapper import generate_sine_wave, measure_voltage
+import matplotlib.pyplot as plt
+import time
+from alive_progress import alive_bar
 
-\cite{abcd}
+dwf = DwfLibrary()
+def experiment(experiment_config):
+    create_folder(results_folder)
+    with openDwfDevice(dwf) as device:
+        total_results = []
+        amplitude = 5
+        freq_ini = 0.02
+        freq_fin = 0.2
+        num = 10
+
+        with alive_bar(num) as bar:
+            for frequency in np.linspace(freq_ini, freq_fin, num):
+
+                output_channel = device.analogOut
+                generate_sine_wave(
+                    output_channel, frequency=frequency, amplitude=amplitude
+                )
+
+                time.sleep(1)
+                input_channel = device.analogIn
+                result = measure_voltage(
+                    input_channel,
+                    record_time=1 / frequency * 10,
+                    sampling_frequency=frequency * 100,
+                    number_of_channel=2,
+                )
+
+                config_dict = experiment_config.copy()
+                config_dict["frequency"] = frequency
+                config_dict["amplitude"] = amplitude
+                result["config"] = config_dict
+
+                total_results.append(result)
+                bar()
+
+    return total_results
+\end{lstlisting}
 \section{References}
 \bibliographystyle{plain} 
 \bibliography{recref}
