@@ -49,7 +49,7 @@
 \maketitle
 
 \begin{abstract}
-An abstract is a short paragraph summary (< 150 words). Abstract overviews what the report entails from what you did, what you found (measured), and what you conclude. In general, start abstracts with ‘We report on...’ followed by why you did it (here you can state why your specific experiment is justified for the particular lab module), what you found, and what you conclude. The abstract should grab the attention of a casual reader so that they want to read the full manuscript in detail. Keep it short and simple.
+An abstract is a short parauhughygyggraph summary (< 150 words). Abstract overviews what the report entails from what you did, what you found (measured), and what you conclude. In general, start abstracts with ‘We report on...’ followed by why you did it (here you can state why your specific experiment is justified for the particular lab module), what you found, and what you conclude. The abstract should grab the attention of a casual reader so that they want to read the full manuscript in detail. Keep it short and simple.
 \end{abstract}
  
 \begin{multicols}{2}
@@ -60,7 +60,7 @@ The goal of this experiment is to verify if the rectification circuit performs w
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.2\textwidth]{half_wave_rectifier.png}
-    \caption{Basic half-wave rectifier}
+    \caption{will be replaced}
     \label{fig:hwr}
 \end{figure}
 
@@ -69,11 +69,15 @@ A half-wave rectifier is less efficient than a full-wave rectifier, as it only u
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.2\textwidth]{full_wave_rectifier.png}
-    \caption{Basic full-wave rectifier}
+    \caption{will be replaced}
     \label{fig:fwr}
 \end{figure}
 
 In contrast, a full-wave rectifier makes use of both halves of the AC cycle, providing higher output efficiency and a smoother DC signal with less ripple.
+
+The voltage drop in a diode occurs due to the energy required to overcome the potential barrier at the p-n junction. When forward-biased, electrons from the n-side need energy to cross the depletion region and recombine with holes, resulting in a forward voltage drop, typically around 0.7V for silicon diodes and 0.3V for germanium diodes. In this experiment, the voltage drop across diodes plays a crucial role in the rectification circuit. A full-wave rectifier using four diodes introduces a forward voltage drop that affects the overall output. When using LEDs as diodes, the forward voltage drop is higher, ranging from 1.8V to 3.3V, depending on the material and color. The objective is to evaluate how these voltage drops influence the effectiveness of the rectification process, particularly the amplitude and smoothness of the rectified DC output, which is critical for optimizing circuit efficiency and performance.
+
+In a circuit composed solely of resistors and diodes, however, the voltage across the resistor does not stabilize due to the rapidly changing AC power supply. Therefore, to effectively convert the AC input into a steady DC output, additional circuit elements are required. When a capacitor  C  is connected in parallel with the resistor  R , the equation describing the circuit becomes as follows:
 
 It is reasonable to assume the resistance of diode, denoted by $r$. In this experiment, various elements were used to check if it was converted into DC well. In particular, resistance, capacitor or diodes were used to verify  characteristics of the signal. If there are no elements, but just linked with cable, the output voltage is as follows.
 
@@ -103,7 +107,30 @@ Therefore,
     V_C = \frac{2}{\pi}V_0 - \frac{4}{\pi} \sum_{k=1}^{\infty} \frac{V_0}{4k^2-1} \mathrm{Re}(\frac {e^{2ik\omega t}}{2ik\omega RC+1})
 \end{equation}
 
-In this experiment, the voltage drop across diodes plays a crucial role in the performance of the rectification circuit. When constructing a full-wave rectifier using four diodes, each diode introduces a forward voltage drop, typically around 0.7V for silicon diodes, which affects the overall output voltage of the rectified signal. In the case of using LEDs, the forward voltage drop is even more significant, ranging between 1.8V and 3.3V, depending on the LED’s material and color. The objective of this experiment is to evaluate how these voltage drops influence the effectiveness of the rectification process, particularly in terms of the amplitude and smoothness of the rectified DC output. Understanding the voltage drop behavior is essential for optimizing the rectifier circuit, as it directly impacts the power efficiency and the quality of the DC signal delivered to the load.
+
+Figure ? illustrates the behavior of a capacitor discharging in a rectifier circuit and the resulting ripple voltage across the load. The voltage across the capacitor decays exponentially as it discharges through the load, following the equation: (would modify soon)
+
+\[
+V = V_{p(in)} e^{-t/RC}
+\]
+
+where \( V_{p(in)} \) is the peak input voltage, \( t \) is the time, and \( RC \) is the time constant of the circuit. The peak-to-peak ripple voltage, \( V_r(pp) \), can be approximated as:
+\[
+V_r(pp) = \frac{V_{p(in)}}{2f RC}
+\]
+This equation indicates that the ripple voltage decreases with larger values of \( RC \), showing the importance of the time constant in minimizing ripple.
+The RMS value of the ripple voltage for this sawtooth-like waveform is given by:
+\[
+V_r(rms) = \frac{V_{p(in)}}{4\sqrt{3}f RC}
+\]
+Additionally, the DC component \( V_{dc} \) is impacted by the ripple voltage, and for small ripple conditions, \( t_{dis} \approx T \), where \( T \) is the period of the AC input. The DC voltage is calculated as:
+
+\[
+V_{dc} = V_{p(in)} \left( 1 - \frac{1}{4f RC} \right)
+\]
+
+This relationship shows how the average DC voltage is slightly reduced due to the ripple effect. The analysis is essential for understanding the capacitor's smoothing role in rectification and how the choice of \( RC \) values influences output quality.
+
 
 \section{Experiment}
 \subsection{Apparatus}
