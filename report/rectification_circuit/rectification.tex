@@ -12,6 +12,9 @@
 \usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{caption}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{white}, 
@@ -36,7 +39,7 @@
  bottom=40mm
  }
 
-\title{\textbf{Intermediate Physics Lab 2:\\AC current rectification}}
+\title{\textbf{Journey to DC from AC: Rectification Circuit}}
 \author{
     Woojin Han\textsuperscript{1}, Taeyoon Kim\textsuperscript{1}, Leo Park\textsuperscript{2}, Seokwon Song\textsuperscript{1}  \\
   \textsuperscript{1}Department of Physics \& Astronomy, Seoul National University, Seoul 08858, Korea \\
@@ -49,37 +52,57 @@
 \maketitle
 
 \begin{abstract}
-An abstract is a short parauhughygyggraph summary (< 150 words). Abstract overviews what the report entails from what you did, what you found (measured), and what you conclude. In general, start abstracts with ‘We report on...’ followed by why you did it (here you can state why your specific experiment is justified for the particular lab module), what you found, and what you conclude. The abstract should grab the attention of a casual reader so that they want to read the full manuscript in detail. Keep it short and simple.
+We report on the analysis of a rectification circuit on the effect of capacitance across varying input frequencies.
+The experiment contains constructing the circuit using multiple diodes and measuring the ripple voltage over a frequencies from 0.02 Hz to 200 Hz.
+The voltage across 10 periods for each frequency, we analyzed the relationship between ripple voltage and frequency.
+The results show that the ripple voltage decreases as the driving frequency increases, the expected inverse proportionality.
+Linear regression of the log-log plot have a slope near -1, consistent with calculated predictions.
+This experiment highlights the essential role of capacitance in recification circuit and the relationship between capacitance, frequency, and ripple voltage in the circuits.
 \end{abstract}
  
 \begin{multicols}{2}
 
 \section{Introduction}
-The goal of this experiment is to verify if the rectification circuit performs well, which converts an AC signal into a DC signal. A basic form of such circuit is as follows. 
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.2\textwidth]{half_wave_rectifier.png}
-    \caption{will be replaced}
-    \label{fig:hwr}
+    \begin{subfigure}[b]{8cm}
+        \centering
+        \includegraphics[width=5cm]{../images/circuit diagram.png}
+        \caption{}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{8cm}
+      \centering
+      \includegraphics[width=5cm]{../images/experimental image.jpg}
+      \caption{}
+  \end{subfigure}
+  \hfill
+  \centering
+  \hfill
+    \caption{
+        (a) The schematic circuit diagram of the rectification circuit. The input voltage is given in the right hand side of the circuit, sinosodic.
+        The refined voltage is measured in the nodes of the capacitor.
+        (b) Is the formed circuit with the Analog Discovery 2 (\cite{digilent_analog_discovery}), on bread board.
+        The led takes place to perform the diode in the circuit, and the capacitor is variously used for its use, which is claimed below.
+    }
+    \label{fig: introduction}
 \end{figure}
 
-A half-wave rectifier is less efficient than a full-wave rectifier, as it only uses one half of the AC cycle, leading to lower output voltage and higher ripple, requiring more filtering.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.2\textwidth]{full_wave_rectifier.png}
-    \caption{will be replaced}
-    \label{fig:fwr}
-\end{figure}
-
-In contrast, a full-wave rectifier makes use of both halves of the AC cycle, providing higher output efficiency and a smoother DC signal with less ripple.
-
-The voltage drop in a diode occurs due to the energy required to overcome the potential barrier at the p-n junction. When forward-biased, electrons from the n-side need energy to cross the depletion region and recombine with holes, resulting in a forward voltage drop, typically around 0.7V for silicon diodes and 0.3V for germanium diodes. In this experiment, the voltage drop across diodes plays a crucial role in the rectification circuit. A full-wave rectifier using four diodes introduces a forward voltage drop that affects the overall output. When using LEDs as diodes, the forward voltage drop is higher, ranging from 1.8V to 3.3V, depending on the material and color. The objective is to evaluate how these voltage drops influence the effectiveness of the rectification process, particularly the amplitude and smoothness of the rectified DC output, which is critical for optimizing circuit efficiency and performance.
-
-In a circuit composed solely of resistors and diodes, however, the voltage across the resistor does not stabilize due to the rapidly changing AC power supply. Therefore, to effectively convert the AC input into a steady DC output, additional circuit elements are required. When a capacitor  C  is connected in parallel with the resistor  R , the equation describing the circuit becomes as follows:
-
-It is reasonable to assume the resistance of diode, denoted by $r$. In this experiment, various elements were used to check if it was converted into DC well. In particular, resistance, capacitor or diodes were used to verify  characteristics of the signal. If there are no elements, but just linked with cable, the output voltage is as follows.
+The goal of this experiment is to verify if the rectification circuit performs well, which converts an AC signal into a DC signal. A basic form of such circuit is depicted at Fig. \ref{fig: introduction} (a). 
+A full-wave rectifier makes use of both halves of the AC cycle, providing higher output efficiency and a smoother DC signal with less ripple.
+The voltage drop in a diode occurs due to the energy required to overcome the potential barrier at the p-n junction.
+When forward-biased, electrons from the n-side need energy to cross the depletion region and recombine with holes, resulting in a forward voltage drop, typically around 0.7V for silicon diodes and 0.3V for germanium diodes.
+In this experiment, the voltage drop across diodes plays a crucial role in the rectification circuit.
+A full-wave rectifier using four diodes introduces a forward voltage drop that affects the overall output.
+When using LEDs as diodes, the forward voltage drop is higher, ranging from 1.8V to 3.3V, depending on the material and color.
+The objective is to evaluate how these voltage drops influence the effectiveness of the rectification process, particularly the amplitude and smoothness of the rectified DC output, which is critical for optimizing circuit efficiency and performance.
+In a circuit composed solely of resistors and diodes, however, the voltage across the resistor does not stabilize due to the rapidly changing AC power supply.
+Therefore, to effectively convert the AC input into a steady DC output, additional circuit elements are required. When a capacitor  C  is connected in parallel with the resistor  R , the equation describing the circuit becomes as follows:
+It is reasonable to assume the resistance of diode, denoted by $r$.
+In this experiment, various elements were used to check if it was converted into DC well.
+In particular, resistance, capacitor or diodes were used to verify  characteristics of the signal.
+If there are no elements, but just linked with cable, the output voltage is as follows.
+To rigorously build up the formalism and finally get to the approximal solution in well performing area, let us clarify the problem mathematically and solve it.
 
 \begin{equation}
     V_{NULL}  = V_0 \left|\sin(\omega t)\right|
@@ -108,7 +131,9 @@ Therefore,
 \end{equation}
 
 
-Figure ? illustrates the behavior of a capacitor discharging in a rectifier circuit and the resulting ripple voltage across the load. The voltage across the capacitor decays exponentially as it discharges through the load, following the equation: (would modify soon)
+Fig. \ref{fig: example figure} illustrates the behavior of a capacitor discharging in a rectifier circuit and the resulting ripple voltage across the load.
+The relation between the drive frequency and the ripple voltage is the main focus of this report.
+The voltage across the capacitor decays exponentially as it discharges through the load, following the equation.
 
 \[
 V = V_{p(in)} e^{-t/RC}
@@ -142,7 +167,7 @@ The serially connected capacitor is examined, five different situation is tested
 True capacitance value of each component is measured by multimeter, and its result is presented at Fig. \ref{table: capacity data}.
 By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.622 \mu \mathrm{F}$, $2.255 \mu \mathrm{F}$, $1.478 \mu \mathrm{F}$, and $1.115 \mu \mathrm{F}$ be the circuit capacity condition of each experiments.
 
-\begin{figure}[H]
+\begin{table}[H]
     \centering
     \begin{tabular}{c|c}
         \textbf{Index} & \textbf{Measured Capacitance} \\ 
@@ -164,7 +189,7 @@ By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.6
         The index is labeled by the factory value denoted in arbitrary order.
     }
     \label{table: capacity data}
-\end{figure}
+\end{table}
 
 \subsection{Methods}
  Construct the circuit as (figure), and plug drive voltage to the input node respectively.
@@ -176,22 +201,43 @@ By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.6
  The machine works by the python code built, with SDK provided by \cite{digilent_analog_discovery}.
  The code for such frequency sweep experiment is denoted in \ref{Appendix: Codes}.
 
-\section{Results and Conclusion}
+ The measured result is listed into the frequency - capacitance - voltage over time.
+ Minimal and maximum value of the voltage measured by period is found.
+ In each, the measured result can be denoted as $V_{\mathrm{out}} (t; f, C) $.
+ \begin{equation}
+    V_{\mathrm{rip}} (f, C) = \max_t V_{\mathrm{out}} - \min_t V_{\mathrm{out}}
+ \end{equation}
+ Then, by the definition of the ripple voltage, the maximum and minimal pooling induces the main observable, ripple voltage.
+ As claimed above, the ripple voltage is inversely relavent to the frequency of the driving input, the linear regression of such result is expected with $-1.0$ coefficient in such region.
+ \begin{equation}
+    \mathrm{log} V_{\mathrm{rip}} = -1.0 \mathrm{log} f + b(C)
+ \end{equation}
+
+\section{Results}
  The term drive voltage denotes the total voltage applied to the circuit, before rectified.
  And, the term reaction voltage means the measured voltage after rectified across capacitor.
  The performance of the DC filter can be measured by the difference of the max and min value of the reaction produced, conventionally called as ripple voltage.
  The diode and the rest of the circuit capacitance is about few $\mathrm{pF}$, so that is totally negliable from the external capacity attatched.
  
+Fig. \ref{fig: example figure} shows the time series raw data of reaction and the drive voltage of capaciy $4.6 \mathrm{\mu F}$.
+Fig. \ref{fig: example figure} (a) is the data of drive frequency $0.04 \mathrm{Hz}$, and (b) is for the drive frequency $100.0 \mathrm{Hz}$
+As expected, the ripple voltage value gets lower when the frequency gets higher.
+There are asymmetry found for half period rectification, the reason for the error is discussed below (!ref todo)
+For the extremely low or high frequency, the approximation fails, the results should be considered as complex differential equation.
+We tried to simulate the the equation, and found the DC offset error might cause the asymmetry.
+But, note that there are no more rigorous evidence for this claim, the furthermore analysis required.
+
 \begin{figure}[H]
     \begin{subfigure}[b]{8cm}
         \centering
-        \includegraphics[width=8cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (0.0400).png}
+        \includegraphics[width=6cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (0.0400).png}
         \caption{}
     \end{subfigure}
+    \centering
     \hfill
     \begin{subfigure}[b]{8cm}
       \centering
-      \includegraphics[width=8cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (100.0000).png}
+      \includegraphics[width=6cm]{../../../rectification_results/raw_figs(4.7uF)/drive_frequency (100.0000).png}
       \caption{}
   \end{subfigure}
   \hfill
@@ -207,21 +253,16 @@ By the true value measured, the circuit capacity of $90.86 \mu \mathrm{F}$, $4.6
     \label{fig: example figure}
 \end{figure}
 
-Fig. \ref{fig: example figure} shows the time series raw data of reaction and the drive voltage of capaciy $4.6 \mathrm{\mu F}$.
-Fig. \ref{fig: example figure} (a) is the data of drive frequency $0.04 \mathrm{Hz}$, and (b) is for the drive frequency $100.0 \mathrm{Hz}$
-As expected, the ripple voltage value gets lower when the frequency gets higher.
-There are asymmetry found for half period rectification, the reason for the error is discussed below (!ref todo)
-
 \begin{figure}[H]
-    \begin{subfigure}[b]{6cm}
+    \begin{subfigure}[b]{5cm}
         \centering
-        \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_(1.17uF)_(20).png}
+        \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_(1.17uF)_(20).png}
         \caption{}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{6cm}
+    \begin{subfigure}[b]{5cm}
       \centering
-      \includegraphics[width=6cm]{../../../rectification_results/ripple_voltage_frequency_(1.57uF)_(20).png}
+      \includegraphics[width=5cm]{../../../rectification_results/ripple_voltage_frequency_(1.57uF)_(20).png}
       \caption{}
   \end{subfigure}
   \centering
@@ -239,10 +280,8 @@ To observe the exact dependancy of the ripple voltage by the driving frequency, 
 Fig. \ref{fig: V-f figure}, for some results and the \ref{fig: V-f figure Supplementary} shows the direct plot of ripple voltage and the drive frequency in various kinds of capacitance value.
 The ripple voltage is almost 0 at high frequency, and increase fast near low frequency area, and peaks high over the working amplitude.
 The theory predicts the relation of the ripple voltage and the drive frequency as approximally $V_{\mathrm{rip}} = \frac{I}{f C}$.
-For the extremely low or high frequency, the approximation fails, the results should be considered as complex differential equation.
-We simulated the results, and denoted on (ref! todo)
-
 In the well performing area, the linear regresssion is applied for $\mathrm{log} V- \mathrm{log} f$ plot and its statics shown below.
+The slope of such regression is $-1.06 \pm 0.05$, which strictly proved the relation between ripple voltage and the frequency as expected.
 
 \begin{figure}[H]
     \begin{subfigure}[b]{6cm}
@@ -263,13 +302,14 @@ In the well performing area, the linear regresssion is applied for $\mathrm{log}
         The linear regression of the well performing area is also depicted.
         (a) $1.17 \mathrm{\mu F}$, (b) $1.57 \mathrm{\mu F}$.
         The error bar is calculated by the peak height differ from each period.
-        The figure of different kind of capacitance is provided in \ref{fig: V-f figure Supplementary}.
+        The figure of different kind of capacitance is provided in \ref{fig: log V-log f figure Supplementary}.
+        The 
     }
     \label{fig: log V-log f figure}
 \end{figure}
 
 
-\begin{figure}[H]
+\begin{table}[H]
     \centering
     \begin{tabular}{c|c|c|c}
         \textbf{C} & \textbf{a} & \textbf{b} & $\mathrm{R^2}$ \\ 
@@ -281,18 +321,24 @@ In the well performing area, the linear regresssion is applied for $\mathrm{log}
         \hline
         $2.35uF$ & $-1.05\pm0.01$ & $-2.53\pm0.01$ & $0.999$  \\
         \hline
-        $4.7uF$ & $-1.089\pm0.02$ & $-3.30\pm0.02$ & $0.994$  \\
-        \hline
-        $100uF$ & $-2.16\pm0.21$ & $-10.85\pm0.21$ & $0.828$  \\
+        $4.7uF$ & $-1.09\pm0.02$ & $-3.30\pm0.02$ & $0.994$  \\
         \hline
     \end{tabular}
     \caption{
-        The measured capacitance of each capacitor component.
-        The index is labeled by the factory value denoted in arbitrary order.
+        The linear regression result of Fig. \ref{fig: log V-log f figure} and Fig. \ref{fig: log V-log f figure Supplementary}.
+        $\mathrm{log} V_{\mathrm{rip}} = a \mathrm f + b$ is the regression equation, and the $R^2$ value is provided
     }
     \label{table: linear regression of log log plot}
-\end{figure}
+\end{table}
 
+\section{Conclusion}
+This experiment was designed to verify the performance of the recification circuit and to figure out the important role of a capacitor in the rectification circuit. 
+The theoritical equation of the desired ripple voltage was calculated as eq (4). 
+The experiment was proceeded by measuring the capacitor's voltage of the circuit shown in Fig. \ref{fig: introduction} (a) which is desired to be rectified, with varying the input signal's frequency.
+One could observe that the the ripple voltage value gets lower as the frequency gets higher, which is consistent with the expectation.
+However, there was an asymmetry in low and high frequency region respect to the circuit's time constant and this requires furthermore works. 
+Moreover, the exact dependency of the ripple voltage to the signal frequency was confirmed results of the linear regression about log frequency - log voltage plots. 
+These results of the experiment hold in various capacitances condition, which rigoursly supports the scientific fact above experimental foundations that the ripple voltage is inversely proportional to the input signal frequency. 
 
 \section{References}
 \bibliographystyle{plain} 
