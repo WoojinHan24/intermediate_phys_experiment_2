@@ -1,0 +1,109 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{color}
+\graphicspath{ {./images/} }
+
+\geometry{
+ a4paper,
+ left=20mm,
+ right=20mm,
+ top=30mm,
+ bottom=40mm
+ }
+
+\title{\textbf{Intermediate Physics Lab 2:\\AC current rectification}}
+\author{
+    Woojin Han\textsuperscript{1}, Taeyoon Kim\textsuperscript{1}, Leo Park\textsuperscript{2}, Seokwon Song\textsuperscript{1}  \\
+  \textsuperscript{1}Department of Physics \& Astronomy, Seoul National University, Seoul 08858, Korea \\
+  \textsuperscript{2}Department of Mechanical Engineering , Seoul National University, Seoul 08858, Korea \\
+  \date{\today}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+An abstract is a short paragraph summary (< 150 words). Abstract overviews what the report entails from what you did, what you found (measured), and what you conclude. In general, start abstracts with ‘We report on...’ followed by why you did it (here you can state why your specific experiment is justified for the particular lab module), what you found, and what you conclude. The abstract should grab the attention of a casual reader so that they want to read the full manuscript in detail. Keep it short and simple.
+\end{abstract}
+ 
+\begin{multicols}{2}
+
+\section{Introduction}
+The goal of this experiment is to verify if the rectification circuit performs well, which converts an AC signal into a DC signal. A basic form of such circuit is as follows. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{half_wave_rectifier.png}
+    \caption{Basic half-wave rectifier}
+    \label{fig:hwr}
+\end{figure}
+
+A half-wave rectifier is less efficient than a full-wave rectifier, as it only uses one half of the AC cycle, leading to lower output voltage and higher ripple, requiring more filtering.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.2\textwidth]{full_wave_rectifier.png}
+    \caption{Basic full-wave rectifier}
+    \label{fig:fwr}
+\end{figure}
+
+In contrast, a full-wave rectifier makes use of both halves of the AC cycle, providing higher output efficiency and a smoother DC signal with less ripple.
+
+It is reasonable to assume the resistance of diode, denoted by $r$. In this experiment, various elements were used to check if it was converted into DC well. In particular, resistance, capacitor or diodes were used to verify  characteristics of the signal. If there are no elements, but just linked with cable, the output voltage is as follows.
+
+\begin{equation}
+    V_{NULL}  = V_0 \left|\sin(\omega t)\right|
+\end{equation}
+
+If the element is a resistance $R$, 
+
+\begin{equation}
+    V_R = \frac{R}{2r+R} V_0\left|\sin(\omega t)\right|
+\end{equation}
+
+If the element is a capacitor $C$,
+
+\begin{equation}
+    \frac{d}{dt}V_C + \frac{1}{RC}V_C = \frac{V_0}{RC}\left|\sin(\omega t)\right|
+\end{equation}
+
+While the absolute of sin function is as follows.
+\[
+    \left| \sin(x) \right|=\frac{2}{\pi} - \frac{4}{\pi} \sum_{k=1}^{\infty} \frac{\cos(2kx)}{4k^2-1} 
+\]
+
+Therefore,
+\begin{equation}
+    V_C = \frac{2}{\pi}V_0 - \frac{4}{\pi} \sum_{k=1}^{\infty} \frac{V_0}{4k^2-1} \mathrm{Re}(\frac {e^{2ik\omega t}}{2ik\omega RC+1})
+\end{equation}
+
+In this experiment, the voltage drop across diodes plays a crucial role in the performance of the rectification circuit. When constructing a full-wave rectifier using four diodes, each diode introduces a forward voltage drop, typically around 0.7V for silicon diodes, which affects the overall output voltage of the rectified signal. In the case of using LEDs, the forward voltage drop is even more significant, ranging between 1.8V and 3.3V, depending on the LED’s material and color. The objective of this experiment is to evaluate how these voltage drops influence the effectiveness of the rectification process, particularly in terms of the amplitude and smoothness of the rectified DC output. Understanding the voltage drop behavior is essential for optimizing the rectifier circuit, as it directly impacts the power efficiency and the quality of the DC signal delivered to the load.
+
+\section{Methods}
+The rectification circuit is constructed by four diodes, working in AC voltage provided by Analog Discovery 2.
+The frequency is varied from $0.02Hz$ to $200Hz$ in logarithmic scale, at 40 sampling points.
+For each frequency experiment, exactly ten period of 
+
+\section{Results}
+Matlab's calculation results are also taken into the consideration to compare with acquired data. The code used for the calculation is attached on the last page. (will be added)
+
+\section{Conclusions}
+In this section, discuss the significance of your results in relation to what you proposed in the introduction.
+
+\section{Acknowledgements}
+The authors would like to acknowledge...
+
+\cite{abcd}
+\section{References}
+\bibliographystyle{plain} 
+\bibliography{recref}
+
+\end{multicols}
+\end{document}
