@@ -208,6 +208,32 @@ As the frequency increases, the gain of minimum and maximum signals are converge
 
 \subsection{Total Circuit Results}
 \label{Subsection: Results of Total Circuits}
+The total circuit passes the amplified input signal through the amplification circuit, which then detects the peak through the peak detection circuit. 
+Similar with the result of the peak detection circuit, Fig. \ref{fig: Total Circuit Results} (a) demonstrates the linearity of the signal gain with respect to the voltage of the input signal. 
+The both max/min gain shows the linearity similar with the result of the peak detection circuit. 
+On the other hand, an expected gain of the amplification circuit is $A_v=10.92$ which is calculated by the measured resistance values. 
+Since the results were measured in the 0 to 0.25V input voltage range, it can be confirmed that the amplification circuit is also operating properly.
+Fig.\ref{fig: Total Circuit Results} (b) shows the linear regression coefficients by the frequency of the input signal for the total circuit. 
+The similar tendency to the peak detected circuit was also observed in the total circuit which contains the amplification circuit. 
+Therefore, the total circuit, the circuit one would use in the final project about a muon detection, also gives a flat signal when the change of the signal is way more rapid than the time constant what we have set. 
+In contrast, for the low frequency signal, a difference between max/min gain is much bigger. 
+Since signals of muons consist of peaks and noises which are correspoding to low and high frequency signals, this total circuit is considered suitable for detecting the energy signal of muons in the final project.
+\begin{figure}[H]
+  \begin{subfigure}[b]{8cm}
+      \centering
+      \includegraphics[width=8cm]{./images/total_circuit_results.png}
+  \end{subfigure}
+\centering
+\hfill
+  \caption{
+      (a) output voltage [V] - input voltage [V] of the minimum and maximum voltage of the output signal is plotted each in red and blue dots.
+      The line in each color represents the linear regresssion result in voltage.
+      (b) Gain - input frequency [Hz] of the total experiment results. The Gain of each minimum and maximum voltages are obtained by linear regression.
+  }
+  \label{fig: Total Circuit Results}
+\end{figure}
+
+
 \subsection{Response to Noise Profile}
 \label{Subsection: Response to Noise Profile}
  The muon creates the peak with noise ratio.
