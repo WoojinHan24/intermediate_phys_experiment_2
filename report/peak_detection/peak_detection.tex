@@ -67,10 +67,27 @@ Energy scale? (My proposal : SiPM may amplify the signal enough and generate lar
 
 \section{Experiment}
 \subsection{Apparatus and Codes}
+The AC voltage in this experiment was provided by Analog Discovery 2. 
 
-\subsection{Amplifier Circuit}
+\subsection{Peak Detection Circuit}
+The peak detection circuit, as shown in Figure (TODO), was constructed using an op-amp, a diode, a capacitor and two resistors with $R_3=988.0\pm0.05\Omega$, $R_4=988.1\pm0.05\Omega$ and $C=4.599\pm0.0005\mu F$.
+An AC voltage was provided as an input sinusodial signal which was expected to be detected by the peak detection circuit.  
+The nodes between the drive AC voltage and the output detection signal were connected to Channel 1 and Channel 2 of Analog Discovery 2 Oscilloscope, respectively. 
+A total of 20 measurements were taken over the frequency range of $2\mathrm{Hz}$ to $200\mathrm{Hz}$ on a logarithmic scale.  
+For each frequency, measurements were taken at intervals of $0.05\mathrm{V}$ over the input signal's amplitude range of $0\mathrm{V}$ to $2.5\mathrm{V}$. 
+All data were measured for a duration of 10 periods. \\
+The waveforms of the input and output signals were compared to verify whether the peak of the sinusodial signal was properly detected for each frequency. 
+Also, minimum and maximum voltage of the input and output signal were measured by period. 
+The linear relationship between the input and output signals' voltage was analyzed for each minimum and maximum voltage, respectively. 
+Also using that, their gain, a ratio between input and output signal voltage for minimum and maximum value were also calculted. 
+Then, the variation of gains of minimum and maximum voltage with respect to frequency were investigated.
+\\
 
-\subsection{Peak Detection Cirtuit}
+\subsection{Total Circuit}
+The entire circuit consists of an amplification circuit, as shown in Figure 1, and a peak detection circuit, as shown in Figure 2.
+The resistors with $R_1=465.9\pm0.05\Omega$, $R_2=46.98\pm0.005\Omega$ were used in an amplification circuit and a capacitor, resistors in a peak detection circuit was the same as above. 
+The node were connected same as above also. 
+Measurements and analysis of results were carried out in the same manner as the previous peak detection circuit experiment.
 
 \section{Results}
  The subsections includes four experimental results.
@@ -85,7 +102,7 @@ Energy scale? (My proposal : SiPM may amplify the signal enough and generate lar
 
 \subsection{Peak Detection Circuit}
 \label{Subsection: Results of Single Circuit}
-The results 
+The peak detection circuit
 \begin{figure}[H]
     \begin{subfigure}[b]{8cm}
         \centering
