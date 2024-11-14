@@ -3,7 +3,7 @@ from pydwf.utilities import openDwfDevice
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-from libs.pydwf_wrapper import generate_sine_wave, measure_voltage, generate_sine_wave_with_noise, load_waveform_from_file, save_waveform_to_file, output_waveform_to_dwf
+from libs.pydwf_wrapper import generate_sine_wave, measure_voltage
 
 # DWF 라이브러리 초기화
 dwf = DwfLibrary()
@@ -17,8 +17,8 @@ device.analogIO.channelNodeSet(1, 1, -5.0)  # V-를 -5V로 설정
 device.analogIO.enableSet(True)  # 전원 공급 활성화
 
 # 주파수와 진폭 설정
-frequency = 100  # 주파수 10Hz
-amplitude = 3.0  # 진폭 4V
+frequency = 200  # 주파수 10Hz
+amplitude = 0.05  # 진폭 4V
 noise_std_dev = 1  # 노이즈 표준편차
 duration = 1  # 주기 (초)
 samples_per_cycle = 1000  # 샘플 수
@@ -32,6 +32,7 @@ record_time = 10 / frequency  # 측정 시간 (초)
 sampling_frequency = frequency * 1000  # 샘플링 주파수 (샘플/초)
 number_of_channel = 2  # 채널 2개 측정
 
+time.sleep(1)
 # 채널 1과 채널 2의 전압을 측정
 input_channel = device.analogIn
 data = measure_voltage(input_channel, record_time, sampling_frequency, number_of_channel)
