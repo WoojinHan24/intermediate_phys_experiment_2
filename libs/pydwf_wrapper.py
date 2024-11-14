@@ -51,7 +51,12 @@ def generate_square_wave(
 
 
 def generate_custom_wave(output_channel, wave, period, channel_index=0):
-    print()
+    # this generates custom wave outputs from wave and period input.
+    # in period, the voltage in the list (wave) is iterates respectively
+    # the signal is repeated indefinitely
+    print(
+        f"Custom Wave Generated in CH{channel_index+1}!!\nT = {period:.2f}Hz\n-----------"
+    )
     node = DwfAnalogOutNode.Carrier
     output_channel.reset(channel_index)
     output_channel.device.triggerSet(0, DwfTriggerSource.AnalogOut1)
@@ -76,9 +81,10 @@ def generate_custom_wave(output_channel, wave, period, channel_index=0):
 
 
 def get_noise_wave(noise_size, signal_size, frequency_of_signal, signal_duration):
-
-    # Generate time array based on the desired frequency of the signal
-    sampling_rate = 1000  # Example sampling rate in Hz
+    # create peak signals in signal size in frequency of signal (/s)
+    # the signal width is signal_duration.
+    # there are natural noise size generated in abs value of noise size
+    sampling_rate = 1000
     duration = 1  # Duration in seconds
     t = np.linspace(0, duration, int(sampling_rate * duration))
 

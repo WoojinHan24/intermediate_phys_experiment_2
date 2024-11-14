@@ -73,13 +73,39 @@ Energy scale? (My proposal : SiPM may amplify the signal enough and generate lar
 \subsection{Peak Detection Cirtuit}
 
 \section{Results}
- The subsections 
-\subsection{Amplifier Circuit/Peak Detection Circuit}
+ The subsections includes four experimental results.
+ In \ref{Subsection: Results of Single Circuit}, the performance of the peak detection circuit is depicted.
+ The experiment was held in the frequency, amplitude region of $2 \mathrm{Hz} ~ 200 \mathrm{Hz}$, and $0 ~ 2.5 \mathrm{V}$ is plotted.
+ The time dependent plot of input and output signal is provided with minimum voltage gain via drive voltage is linearly regressed.
+ Therefore, the measured error assumes the peak detection is well working for all frequency window we aimed for. 
+ In \ref{Subsection: Results of Total Circuits}, the frequency and amplitude sweep results from $2 \mathrm{Hz} ~ 200 \mathrm{Hz}$, and $0 ~ 0.25 \mathrm{V}$ is provided.
+ The lineary successful profile of each circuit, and the integrable nature is experimentally proven.
+ Finally, in \ref{Subsection: Response to Noise Profile} the total circuit are tested in noisy peak input to prove its capability in real expected output of photon multiplier.
+ The time constant of the circuit are easily modifiable, which takes part of the peak detecting time threshold of signal with noise. 
 
-\subsection{Integrated Circuit Results}
-
+\subsection{Peak Detection Circuit}
+\label{Subsection: Results of Single Circuit}
+The results 
+\begin{figure}[H]
+    \begin{subfigure}[b]{8cm}
+        \centering
+        \includegraphics[width=8cm]{./images/peak_detection_results.png}
+    \end{subfigure}
+  \centering
+  \hfill
+    \caption{
+        (a) time[s] - voltage [V] result for $2 \mathrm{V}$, $1 \mathrm{Hz}$ drive which are in black dots plotted, with output signal in red dots.
+        (b) time[s] - voltage [V] result for $2 \mathrm{V}$, $100 \mathrm{Hz}$ drive respectively.
+        (c) output voltage [V] - input voltage [V] of the minimum and maximum voltage of the output signal is plotted each in red and blue dots.
+        The line in each color represents the linear regresssion result in voltage.
+        (d) Gain - input frequency [Hz] of the total experiment results. the Gain of each minimum and maximum voltages are obtained by linear regression.
+    }
+    \label{fig: Peak Detection Results}
+\end{figure}
+\subsection{Total Circuit Results}
+\label{Subsection: Results of Total Circuits}
 \subsection{Response to Noise Profile}
-
+\label{Subsection: Response to Noise Profile}
 \section{Discussion}
 \cite{abcd}
 \section{References}
