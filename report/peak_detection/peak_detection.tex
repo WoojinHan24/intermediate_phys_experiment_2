@@ -57,20 +57,96 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
  
 \begin{multicols}{2}
 \section{Introduction}
-\subsection{Muon Detector Schematics}
-(Leo Park) : Detector each parts explanation.
-What weve built for third module and, its theoretical goals.
+\subsection{OP amps}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{total_circuits.png}
+    \caption{
+        (a) Schematic Operational Amplifier
+        (b) Non-inverting Amplifier
+        (c) Peak Detection Circuit
+    }
+    \label{fig: total_circuit_fig}
+\end{figure}
 
-\subsection{Scintilator(? spellings), SiPM module explanation TODO: change this subsection title}
-(Taeyoon Kim) : Scintilator, SiPM, what, how, they can detect muon and generate noisy electric output?
-Energy scale? (My proposal : SiPM may amplify the signal enough and generate large enough signal i.e. ~0.3V, The time scale might be quite short, so that the peak detector should take work here)
+
+Operational amplifiers, commonly referred to as op-amps, are fundamental building blocks in analog electronics, widely utilized in various applications ranging from signal amplification to complex mathematical operations.
+An op-amp typically consists of a differential input stage, a high-gain amplification stage, and a low output impedance, which together enable it to amplify input voltage differences with high precision and stability.
+One important design principle in op-amp circuits is the “10x rule,” which suggests that the input impedance of each stage should be at least ten times the output impedance of the preceding stage.
+This guideline minimizes signal loss, ensures proper signal transfer, and reduces loading effects between stages, thereby maintaining the fidelity of the signal across multiple circuit stages.
+Adherence to the 10x rule is especially critical in cascading amplifier stages, where even slight mismatches in impedance can lead to degradation in performance, signal distortion, and reduced gain accuracy.
+By leveraging the high input impedance and low output impedance characteristics of op-amps, engineers can design circuits that meet these criteria, optimizing for both signal integrity and power efficiency.
+
+For this experiment, two circuits employing op-amps are used for different purposes: amplification and peak detection.
+In general, if the closed-loop system consists of op-amps, the two input voltages are matched due to the high input impedance and feedback characteristics.
+
+The circuit shown in Fig. \ref{fig: total_circuit_fig} (b) is a non-inverting amplifier, which uses an operational amplifier (op-amp) to amplify the input signal \( V_{in} \) without changing its phase.
+This configuration is called "non-inverting" because the output voltage \( V_{out} \) is in phase with the input, meaning there is no 180° phase shift as there would be in an inverting amplifier.
+The input signal is applied to the non-inverting terminal (\(+\)) of the op-amp, while a feedback network composed of resistors \( R_1 \) and \( R_2 \) sets the amplifier's gain.
+To derive the gain, we note that due to the high input impedance of the op-amp, the voltage at the inverting terminal (\(-\)) equals the input voltage \( V_{in} \) because of the virtual short concept.
+The inverting terminal voltage \( V_{-} \) can also be described by the voltage divider formed by \( R_1 \) and \( R_2 \), giving \( V_{-} = V_{out} \cdot \frac{R_1}{R_1 + R_2} \).
+Since \( V_{-} = V_{in} \), we have \( V_{in} = V_{out} \cdot \frac{R_1}{R_1 + R_2} \).
+Rearranging this to express \( V_{out} \) in terms of \( V_{in} \) yields \( V_{out} = V_{in} \cdot \frac{R_1 + R_2}{R_1} \), so the gain \( A_v \) of the amplifier is \( A_v = \frac{V_{out}}{V_{in}} = 1 + \frac{R_2}{R_1} \).
+This gain expression shows that the output is a scaled version of the input, with the scaling factor determined by \( R_1 \) and \( R_2 \), allowing for controlled amplification while preserving the input phase.
+
+
+The circuit shown in Figure \ref{fig: total_circuit_fig} (c) is a peak detector designed to capture and hold the maximum voltage of an input signal \( V_{in} \), utilizing an operational amplifier, diode \( D \), capacitor \( C \), and resistors \( R_1 \), \( R_2 \), and \( R_3 \).
+This configuration allows the circuit to record the highest input value at \( V_{out} \) without being affected by subsequent lower values.
+The input voltage \( V_{in} \) is applied to the non-inverting terminal of the operational amplifier through resistor \( R_2 \), while feedback resistor \( R_3 \) sets the gain of the op-amp, ensuring that it drives the diode \( D \) with enough current to respond to small changes in \( V_{in} \).
+When \( V_{in} \) reaches a new peak, the op-amp output forward-biases the diode \( D \), allowing current to charge the capacitor \( C \) to this peak value.
+This charged voltage on \( C \) holds the peak value, as the diode prevents the capacitor from discharging through the op-amp when \( V_{in} \) drops below the peak.
+The resistor \( R_1 \) provides a controlled discharge path, allowing the stored voltage on \( C \) to decay gradually over time if no higher peaks are encountered.
+Consequently, the output voltage \( V_{out} \), taken across \( C \) and \( R_1 \), represents the peak of \( V_{in} \) until a new higher peak is detected or the stored voltage decays.
+
+\subsection{Scintillator and SiPM}
+
+Scintillator and SiPM are 2 main elements for detecting muons.
+To understand its mechanism, it is crucial to know how muons behave in this setting.
+First step is to know the origin of muons.
+Cosmic rays, which are various kinds of radioactive high energy ray from the space, strike the atmosphere at every moment.
+A very basic example would be the solar wind. To explain briefly, particles(such as pions) from cosmic rays react with atoms in the atmosphere, resulting high-energy muons.
+Although muons naturally have a very short lifetime, the time dilation due to their fast speed allows them to reach the ground.
+An exact reaction equations are at equation \ref*{eqn:rxn1} and \ref*{eqn:rxn2}. The particles in the equations are, respectively, pions, muons and muon neutrinos. 
+
+\begin{equation}
+  \label{eqn:rxn1}
+  \pi^+ \rightarrow \mu^+ +\nu_\mu
+\end{equation}
+\begin{equation}
+  \label{eqn:rxn2}
+  \pi^- \rightarrow \mu^- +\overline{\nu_\mu}
+\end{equation}
+
+The main property of scintillator is that, when irradiated, it emits light.
+When a muon (or any charged particle) strikes the scintillator, it interacts with molecules through electronic interactions.
+The kinetic energy of muons would be transferred to the energy of electrons in these molecules.
+The excited electrons will soon decay back to their original energy state, making a simultaneous light emission.
+According to the law of energy conservation, the number of emitted photons is proportional to the given kinetic energy of the particle.
+Simply put, scintillator is a substance that converts charged particles into light signals.
+
+However, some noise signals may exist.
+For example, alpha rays, beta rays and Compton scattered electrons from gamma rays can produce noise.
+Although such noise is statistical in nature, the typical energy scales of these rays are known.
+Muon's energy scale is about $50 \mathrm{MeV}$, whereas other particles typcally have energies around $1 \mathrm{MeV}$.
+Hence, one can deduce that the ratio between the signal and noise is $1/50$.
+
+The next step is to detect the emitted light from the scintillator. 
+However, the luminosity of this light is very low and concentrated over a very short period of time. 
+SiPM is the sensor designed to capture such light signals.
+Quantitatively, a muon signal lasts on the scale of several microseconds, while SiPM can capture signals on the nanosecond scale.
+In this experiment, we will use SiPM to collect the muon signal.
+At this level of detection, noise is also present.
+The SiPM has it own inherent noise, known as the dark rate.
+In the SiPM, the charge carriers generate signals by transition between conduction/valence band or two distinct bands.
+Usually such transition is given by light (in other words, electronic field), but also thermal noise would make a defect on the output signal.
+Such noise depends on the temperature of the system. 
 
 \section{Experiment}
 \subsection{Apparatus and Codes}
 The AC voltage in this experiment was provided by Analog Discovery 2. 
 
 \subsection{Peak Detection Circuit}
-The peak detection circuit, as shown in Figure (TODO), was constructed using an op-amp, a diode, a capacitor and two resistors with $R_3=988.0\pm0.05\Omega$, $R_4=988.1\pm0.05\Omega$ and $C=4.599\pm0.0005\mu F$.
+The peak detection circuit, as shown in Fig. \ref{fig: total_circuit_fig} (c), was constructed using an op-amp, a diode, a capacitor and two resistors with $R_3=988.0\pm0.05k\Omega$, $R_5=99.57\pm0.05k\Omega$ and $C=4.599\pm0.0005\mu F$.
 An AC voltage was provided as an input sinusodial signal which was expected to be detected by the peak detection circuit.  
 The nodes between the drive AC voltage and the output detection signal were connected to Channel 1 and Channel 2 of Analog Discovery 2 Oscilloscope, respectively. 
 A total of 20 measurements were taken over the frequency range of $2\mathrm{Hz}$ to $200\mathrm{Hz}$ on a logarithmic scale.  
@@ -102,7 +178,17 @@ Measurements and analysis of results were carried out in the same manner as the 
 
 \subsection{Peak Detection Circuit}
 \label{Subsection: Results of Single Circuit}
-The peak detection circuit
+The peak detection circuit widely spreads the input signals in time constant of the circuit.
+In this experiment, the time constant of the AC handling component is $0.458 [s]$ which are induced by the measured resistance and capacitance value.
+As we can see in Fig. \ref{fig: Peak Detection Results}(a) and (b), contains the input signal (black dots) and output signal (red dots) of the circuit in function of time.
+While the input signal drives the circuit, the diode constrains the charging direction, the output signal is ruled by the number of peaks of the signal.
+To numerize the result, the minimum and maximum voltage via time is used.
+The maximum voltage of output signal gives the information of the size of the drive signal, and the difference between minimum and maximum voltage provides the number of relavent peaks in time window.
+Fig. \ref{fig: Peak Detection Results} (c) shows the linear nature of the signal gain while the driving voltage changes.
+The value of min/max voltage in driving amplitude, and its linear regression results shows that in same frequency, the input voltage is linearly dependent to the output signal.
+Fig. \ref{fig: Peak Detection Results} (d) shows the linear regression coefficients by the frequency of the input signal.
+As the frequency increases, the gain of minimum and maximum signals are converged to the same value, which implies that the peak detection circuit gives flat signal when the change of the signal is way more rapid than the time constant what we have set.
+
 \begin{figure}[H]
     \begin{subfigure}[b]{8cm}
         \centering
@@ -119,10 +205,31 @@ The peak detection circuit
     }
     \label{fig: Peak Detection Results}
 \end{figure}
+
 \subsection{Total Circuit Results}
 \label{Subsection: Results of Total Circuits}
 \subsection{Response to Noise Profile}
 \label{Subsection: Response to Noise Profile}
+ The muon creates the peak with noise ratio.
+ In degenerate thermal noise, the muon peak have $S/N$ ratio above 30, in few $\mu s$.
+ Therefore, the circuit we have 
+ \begin{figure}[H]
+    \begin{subfigure}[b]{8cm}
+        \centering
+        \includegraphics[width=8cm]{./images/noise_response.png}
+    \end{subfigure}
+  \centering
+  \hfill
+    \caption{
+        (a) time[s] - voltage [V] result for $2 \mathrm{V}$, $1 \mathrm{Hz}$ drive which are in black dots plotted, with output signal in red dots.
+        (b) time[s] - voltage [V] result for $2 \mathrm{V}$, $100 \mathrm{Hz}$ drive respectively.
+        (c) output voltage [V] - input voltage [V] of the minimum and maximum voltage of the output signal is plotted each in red and blue dots.
+        The line in each color represents the linear regresssion result in voltage.
+        (d) Gain - input frequency [Hz] of the total experiment results. the Gain of each minimum and maximum voltages are obtained by linear regression.
+    }
+    \label{fig: Noise Response results}
+\end{figure}
+
 \section{Discussion}
 \cite{abcd}
 \section{References}
