@@ -7,21 +7,87 @@ from pydwf import (
 )
 from pydwf.utilities import openDwfDevice
 import numpy as np
+import pydwf
 
 
-def generate_sine_wave(output_channel, frequency, amplitude):
+def generate_sine_wave(
+    output_channel, frequency, amplitude, channel_index=0, offset=0.0
+):
     # this generates sine wave at W1 - ground in respective frequency and amplitude.
     # returns nothing, and there are no methods to stop this yet.
-    CH1 = 0
+    print(
+        f"Sine Wave Generated in CH{channel_index+1}\nf = {frequency:.2f}Hz, A = {amplitude:.2f}V, with Offset = {offset}V\n-----------"
+    )
     node = DwfAnalogOutNode.Carrier
-    output_channel.reset(CH1)
+    output_channel.reset(channel_index)
 
-    output_channel.nodeEnableSet(CH1, node, True)
-    output_channel.nodeFunctionSet(CH1, node, DwfAnalogOutFunction.Sine)
-    output_channel.nodeFrequencySet(CH1, node, frequency)
-    output_channel.nodeAmplitudeSet(CH1, node, amplitude)
+    output_channel.nodeEnableSet(channel_index, node, True)
+    output_channel.nodeFunctionSet(channel_index, node, DwfAnalogOutFunction.Sine)
+    output_channel.nodeFrequencySet(channel_index, node, frequency)
+    output_channel.nodeAmplitudeSet(channel_index, node, amplitude)
+    output_channel.nodeOffsetSet(channel_index, node, offset)
+    output_channel.configure(channel_index, True)
 
-    output_channel.configure(CH1, True)
+
+def generate_square_wave(
+    output_channel, frequency, amplitude, channel_index=0, offset=0.0
+):
+    # this generates sine wave at W1 - ground in respective frequency and amplitude.
+    # returns nothing, and there are no methods to stop this yet.
+    print(
+        f"Square Wave Generated in CH{channel_index+1}!!\nf = {frequency:.2f}Hz, A = {amplitude:.2f}V, with Offset = {offset}V\n-----------"
+    )
+    node = DwfAnalogOutNode.Carrier
+    output_channel.reset(channel_index)
+
+    output_channel.nodeEnableSet(channel_index, node, True)
+    output_channel.nodeFunctionSet(channel_index, node, DwfAnalogOutFunction.Square)
+    output_channel.nodeFrequencySet(channel_index, node, frequency)
+    output_channel.nodeAmplitudeSet(channel_index, node, amplitude)
+    output_channel.nodeOffsetSet(channel_index, node, offset)
+    output_channel.configure(channel_index, True)
+
+
+def generate_custom_wave(output_channel, wave, period, channel_index=0):
+    print()
+    node = DwfAnalogOutNode.Carrier
+    output_channel.reset(channel_index)
+
+    output_channel.nodeEnableSet(channel_index, node, True)
+    output_channel.nodeFunctionSet(channel_index, node, DwfAnalogOutFunction.Custom)
+    output_channel.nodeDataSet(channel_index, node, wave)
+    output_channel.nodeFrequencySet(channel_index, node, 1 / period)
+    output_channel.configure(channel_index, True)
+    output_channel.configure(False, True)
+    # output_channel.runSet(channel_index, 10)
+    output_channel.repeatSet(channel_index, 0)
+
+
+def get_noise_wave(noise_size, signal_size, frequency_of_signal, signal_duration):
+    # Generate time array based on the desired frequency of the signal
+    sampling_rate = 1000  # Example sampling rate in Hz
+    duration = 1  # Duration in seconds
+    t = np.linspace(0, duration, int(sampling_rate * duration))
+
+    noise = noise_size * (np.random.rand(len(t)) * 2 - 1)
+
+    signal = np.zeros_like(t)
+    peak_interval = int(sampling_rate / frequency_of_signal)
+    peak_length = int(sampling_rate * signal_duration)
+
+    for i in range(0, len(t), peak_interval):
+        if i < len(t):
+            for j in range(peak_length):
+                signal[i + j] = signal_size
+
+    wave = noise + signal
+
+    wave = np.clip(wave, -5, 5)
+    return wave
+
+
+def get_sine_wave():
+    return np.array([3 * np.sin(x / 300) for x in range(1000)])
 
 
 def measure_voltage(input_channel, record_time, sampling_frequency, number_of_channel):
@@ -48,6 +114,7 @@ def measure_voltage(input_channel, record_time, sampling_frequency, number_of_ch
     total_samples_corrupted = 0
     return_dict = dict()
 
+    print(f"measuring started, wait {record_time}s")
     for channel_number in list_of_channel:
         return_dict[f"CH{channel_number+1}"] = []
 
@@ -84,3 +151,17 @@ def measure_voltage(input_channel, record_time, sampling_frequency, number_of_ch
     times = np.linspace(0, record_time, int(number_of_samples / 2))
     return_dict["time"] = times
     return return_dict
+
+
+def generate_power_supply(device, Positive_voltage, Negative_voltage):
+    print(
+        f"{pydwf.AnalogIO.channelName(device,0)[0]} set to be {Positive_voltage} which is expected to be V+"
+    )
+    pydwf.AnalogIO.channelNodeSet(device, 0, 0, True)
+    pydwf.AnalogIO.channelNodeSet(device, 0, 1, Positive_voltage)
+    pydwf.AnalogIO.enableSet(device, True)
+    print(
+        f"{pydwf.AnalogIO.channelName(device,1)[0]} set to be {Negative_voltage} which is expected to be V-"
+    )
+    pydwf.AnalogIO.channelNodeSet(device, 1, 0, True)
+    pydwf.AnalogIO.channelNodeSet(device, 1, 1, Negative_voltage)
