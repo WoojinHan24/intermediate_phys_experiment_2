@@ -4,6 +4,8 @@ from pydwf import (
     DwfAnalogOutFunction,
     DwfAcquisitionMode,
     DwfState,
+    DwfAnalogOutIdle,
+    DwfTriggerSource,
 )
 from pydwf.utilities import openDwfDevice
 import numpy as np
@@ -52,18 +54,29 @@ def generate_custom_wave(output_channel, wave, period, channel_index=0):
     print()
     node = DwfAnalogOutNode.Carrier
     output_channel.reset(channel_index)
+    output_channel.device.triggerSet(0, DwfTriggerSource.AnalogOut1)
 
     output_channel.nodeEnableSet(channel_index, node, True)
     output_channel.nodeFunctionSet(channel_index, node, DwfAnalogOutFunction.Custom)
-    output_channel.nodeDataSet(channel_index, node, wave)
+    (amplitude_min, amplitude_max) = output_channel.nodeAmplitudeInfo(
+        channel_index, node
+    )
+    output_channel.nodeAmplitudeSet(channel_index, node, 5.0)
+    output_channel.nodeOffsetSet(channel_index, node, 0.0)
+
+    samples = wave / amplitude_max
+    output_channel.nodeDataSet(channel_index, node, samples)
+    output_channel.waitSet(channel_index, 0.0)
     output_channel.nodeFrequencySet(channel_index, node, 1 / period)
-    output_channel.configure(channel_index, True)
-    output_channel.configure(False, True)
-    # output_channel.runSet(channel_index, 10)
+    output_channel.runSet(channel_index, 20.0)
     output_channel.repeatSet(channel_index, 0)
+    output_channel.idleSet(channel_index, DwfAnalogOutIdle.Initial)
+
+    output_channel.configure(False, True)
 
 
 def get_noise_wave(noise_size, signal_size, frequency_of_signal, signal_duration):
+
     # Generate time array based on the desired frequency of the signal
     sampling_rate = 1000  # Example sampling rate in Hz
     duration = 1  # Duration in seconds
@@ -86,8 +99,13 @@ def get_noise_wave(noise_size, signal_size, frequency_of_signal, signal_duration
     return wave
 
 
-def get_sine_wave():
-    return np.array([3 * np.sin(x / 300) for x in range(1000)])
+def get_sample_wave():
+    x = np.linspace(-1, 1, 10000)
+    w = 0.5 * (1 + np.cos(11 * np.pi * x))
+    y = 0.5 * (1 + np.cos(np.pi * x))
+    waveform = -2.0 + w * y * 6.0
+    print(waveform[5000])
+    return waveform
 
 
 def measure_voltage(input_channel, record_time, sampling_frequency, number_of_channel):

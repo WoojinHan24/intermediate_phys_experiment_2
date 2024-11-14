@@ -1,0 +1,88 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{url}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage[export]{adjustbox}
+\usepackage{float}
+
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{white}, 
+    commentstyle=\color{green},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{gray},
+    stringstyle=\color{red},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    captionpos=b,
+    numbers=left,
+    numbersep=5pt
+}
+\lstset{style=mystyle}
+\graphicspath{ {./images/} }
+
+\geometry{
+ a4paper,
+ left=20mm,
+ right=20mm,
+ top=30mm,
+ bottom=40mm
+ }
+
+\title{\textbf{The Road to Muon Detection: Signal Amplifier and Peak Counter}}
+\author{
+    Woojin Han\textsuperscript{1}, Taeyoon Kim\textsuperscript{1}, Leo Park\textsuperscript{2}, Seokwon Song\textsuperscript{1}  \\
+  \textsuperscript{1}Department of Physics \& Astronomy, Seoul National University, Seoul 08858, Korea \\
+  \textsuperscript{2}Department of Mechanical Engineering , Seoul National University, Seoul 08858, Korea \\
+  \date{\today}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\end{abstract}
+ 
+\begin{multicols}{2}
+\section{Introduction}
+\subsection{Muon Detector Schematics}
+(Leo Park) : Detector each parts explanation.
+What weve built for third module and, its theoretical goals.
+
+\subsection{Scintilator(? spellings), SiPM module explanation TODO: change this subsection title}
+(Taeyoon Kim) : Scintilator, SiPM, what, how, they can detect muon and generate noisy electric output?
+Energy scale? (My proposal : SiPM may amplify the signal enough and generate large enough signal i.e. ~0.3V, The time scale might be quite short, so that the peak detector should take work here)
+
+\section{Experiment}
+\subsection{Apparatus and Codes}
+
+\subsection{Amplifier Circuit}
+
+\subsection{Peak Detection Cirtuit}
+
+\section{Results}
+
+\subsection{Amplifier Circuit/Peak Detection Circuit}
+
+\subsection{Integrated Circuit Results}
+
+\subsection{Response to Noise Profile}
+
+\section{Discussion}
+
+
+\end{multicols}{2}
+
+\end{document}

@@ -6,12 +6,27 @@ import argparse
 
 import numpy as np
 
-from pydwf import (DwfLibrary, DwfEnumConfigInfo, DwfAnalogOutIdle, DwfTriggerSource, PyDwfError,
-                   DwfAnalogOutNode, DwfAnalogOutFunction)
+from pydwf import (
+    DwfLibrary,
+    DwfEnumConfigInfo,
+    DwfAnalogOutIdle,
+    DwfTriggerSource,
+    PyDwfError,
+    DwfAnalogOutNode,
+    DwfAnalogOutFunction,
+)
 from pydwf.utilities import openDwfDevice
+import sys
+
+sys.path.append("../../")
+from libs import pydwf_wrapper
+
+import matplotlib.pyplot as plt
 
 
-def demo_custom_analog_out_waveform(analogOut, waveform, waveform_duration, wait_duration):
+def demo_custom_analog_out_waveform(
+    analogOut, waveform, waveform_duration, wait_duration
+):
     """Put the given waveform on the first analog output channel."""
 
     CH1 = 0
@@ -29,7 +44,9 @@ def demo_custom_analog_out_waveform(analogOut, waveform, waveform_duration, wait
 
     # Determine offset and amplitude values to use for the requested waveform.
 
-    (amplitude_min, amplitude_max) = analogOut.nodeAmplitudeInfo()  # pylint: disable=unused-variable
+    (amplitude_min, amplitude_max) = analogOut.nodeAmplitudeInfo(
+        CH1, node
+    )  # pylint: disable=unused-variable
 
     analogOut.nodeAmplitudeSet(channel, node, amplitude_max)
     analogOut.nodeOffsetSet(channel, node, 0.0)
@@ -57,42 +74,50 @@ def demo_custom_analog_out_waveform(analogOut, waveform, waveform_duration, wait
 def main():
     """Parse arguments and start demo."""
 
-    DEFAULT_WAVEFORM_DURATION = 1e-3
-    DEFAULT_WAIT_DURATION  = 0.0
+    DEFAULT_WAVEFORM_DURATION = 1
+    DEFAULT_WAIT_DURATION = 0.0
 
-    parser = argparse.ArgumentParser(description="Demonstrate AnalogOut custom waveform playback.")
-
-    parser.add_argument(
-            "-sn", "--serial-number-filter",
-            type=str,
-            nargs='?',
-            dest="serial_number_filter",
-            help="serial number filter to select a specific Digilent Waveforms device"
-        )
+    parser = argparse.ArgumentParser(
+        description="Demonstrate AnalogOut custom waveform playback."
+    )
 
     parser.add_argument(
-            "-d", "--duration",
-            type=float,
-            default=DEFAULT_WAVEFORM_DURATION,
-            dest="waveform_duration",
-            help="output sample frequency, in samples/sec (default: {} s)".format(DEFAULT_WAVEFORM_DURATION)
-        )
+        "-sn",
+        "--serial-number-filter",
+        type=str,
+        nargs="?",
+        dest="serial_number_filter",
+        help="serial number filter to select a specific Digilent Waveforms device",
+    )
 
     parser.add_argument(
-            "-w", "--wait",
-            type=float,
-            default=DEFAULT_WAIT_DURATION,
-            dest="wait_duration",
-            help="pre-waveform wait (default: {} s)".format(DEFAULT_WAIT_DURATION)
-        )
+        "-d",
+        "--duration",
+        type=float,
+        default=DEFAULT_WAVEFORM_DURATION,
+        dest="waveform_duration",
+        help="output sample frequency, in samples/sec (default: {} s)".format(
+            DEFAULT_WAVEFORM_DURATION
+        ),
+    )
 
     parser.add_argument(
-            "-f", "--filename",
-            type=str,
-            default=None,
-            dest="filename",
-            help="file containing the waveform as ASCII floating point numbers (default: none)"
-        )
+        "-w",
+        "--wait",
+        type=float,
+        default=DEFAULT_WAIT_DURATION,
+        dest="wait_duration",
+        help="pre-waveform wait (default: {} s)".format(DEFAULT_WAIT_DURATION),
+    )
+
+    parser.add_argument(
+        "-f",
+        "--filename",
+        type=str,
+        default=None,
+        dest="filename",
+        help="file containing the waveform as ASCII floating point numbers (default: none)",
+    )
 
     args = parser.parse_args()
 
@@ -101,9 +126,10 @@ def main():
     else:
         # If no filename is given, construct a mildly interesting waveform in the [-2.0 .. 4.0] V range.
         x = np.linspace(-1, 1, 10000)
-        w = 0.5 * (1 + np.cos(11 * np.pi*x))
-        y = 0.5 * (1 + np.cos(     np.pi*x))
+        w = 0.5 * (1 + np.cos(11 * np.pi * x))
+        y = 0.5 * (1 + np.cos(np.pi * x))
         waveform = -2.0 + w * y * 6.0
+        print(f"wave form is  {w[5000]}")
 
     try:
         dwf = DwfLibrary()
@@ -112,11 +138,22 @@ def main():
             """Select the configuration with the highest possible analog out buffer size."""
             return configuration_parameters[DwfEnumConfigInfo.AnalogOutBufferSize]
 
-        with openDwfDevice(dwf, serial_number_filter=args.serial_number_filter,
-                           score_func=maximize_analog_out_buffer_size) as device:
+        with openDwfDevice(
+            dwf,
+            serial_number_filter=args.serial_number_filter,
+            score_func=maximize_analog_out_buffer_size,
+        ) as device:
 
-            demo_custom_analog_out_waveform(device.analogOut, waveform, args.waveform_duration, args.wait_duration)
+            demo_custom_analog_out_waveform(
+                device.analogOut, waveform, args.waveform_duration, args.wait_duration
+            )
 
+            result = pydwf_wrapper.measure_voltage(
+                device.analogIn, 5.0, sampling_frequency=1000, number_of_channel=1
+            )
+            plt.plot(result["time"], result["CH1"], "k-")
+            # plt.plot(result["time"], result["CH2"], "r.")
+            plt.show()
             print("Running, press Enter to quit.")
             input()
 
