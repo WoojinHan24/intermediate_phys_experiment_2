@@ -177,6 +177,74 @@ def measure_voltage(input_channel, record_time, sampling_frequency, number_of_ch
     return return_dict
 
 
+def count_peaks(
+    input_channel, record_time, sampling_frequency, peak_threshold, number_of_channel
+):
+    # this measures the voltage of CH1 for duration record time.
+    # this is expected to measure the value in frequency of sampling_frequency
+    # number of channel should be 1 or 2.
+
+    if number_of_channel >= 3:
+        print(
+            "the voltage measuring wrapper is not be able to measure 3 or more channels yet"
+        )
+        raise TypeError("the number of channel issue")
+
+    list_of_channel = range(number_of_channel)
+    for channel_number in list_of_channel:
+        input_channel.channelEnableSet(channel_number, True)
+        input_channel.channelRangeSet(channel_number, 10.0)
+
+    input_channel.acquisitionModeSet(DwfAcquisitionMode.Record)
+    input_channel.recordLengthSet(record_time)
+    input_channel.frequencySet(sampling_frequency)
+
+    total_samples_lost = 0
+    total_samples_corrupted = 0
+    total_samples = 0
+    return_dict = dict()
+
+    print(f"measuring started, wait {record_time}s")
+    return_dict["detected time"] = [0.0]
+    for channel_number in list_of_channel:
+        return_dict[f"CH{channel_number+1} cummulative_number"] = [0]
+
+    input_channel.configure(False, True)
+    while True:
+        status = input_channel.status(True)
+
+        (current_samples_available, current_samples_lost, current_samples_corrupted) = (
+            input_channel.statusRecord()
+        )
+        total_samples += current_samples_available
+        total_samples_lost += current_samples_lost
+        total_samples_corrupted += current_samples_corrupted
+        if current_samples_available != 0:
+            for channel_number in list_of_channel:
+                current_samples = input_channel.statusData(
+                    channel_number, current_samples_available
+                )
+                for sample in current_samples:
+                    if abs(sample) > peak_threshold:
+                        return_dict[f"CH{channel_number+1} cummulative_number"].append(
+                            return_dict[f"CH{channel_number+1} cummulative_number"][-1]
+                            + 1
+                        )
+                        return_dict["detected time"].append(
+                            total_samples / sampling_frequency
+                        )
+
+        if status == DwfState.Done:
+            break
+
+    if total_samples_lost != 0 or total_samples_corrupted != 0:
+        print(
+            f"Warning! sample {total_samples_lost} lost, {total_samples_corrupted} corrupted"
+        )
+    return_dict["peak_threshold"] = peak_threshold
+    return return_dict
+
+
 def generate_power_supply(device, Positive_voltage, Negative_voltage):
     print(
         f"{pydwf.AnalogIO.channelName(device,0)[0]} set to be {Positive_voltage} which is expected to be V+"

@@ -9,6 +9,7 @@ from libs.pydwf_wrapper import (
     generate_custom_wave,
     get_noise_wave,
     get_sample_wave,
+    generate_square_wave,
 )
 import matplotlib.pyplot as plt
 import time
@@ -50,22 +51,23 @@ with openDwfDevice(
         for signal_size in signal_sizes:
             generate_power_supply(device, +5.0, -5.0)
             # generate_sine_wave(output_channel, frequency, signal_size)
-            generate_custom_wave(
-                output_channel,
-                get_noise_wave(
-                    noise_size=signal_size / 10,
-                    signal_size=signal_size,
-                    frequency_of_signal=frequency * noise_in_period,
-                    signal_duration=1 / frequency * 1e-1,
-                ),
-                1 / frequency,
-            )
+            # generate_custom_wave(
+            #     output_channel,
+            #     get_noise_wave(
+            #         noise_size=signal_size / 10,
+            #         signal_size=signal_size,
+            #         frequency_of_signal=frequency * noise_in_period,
+            #         signal_duration=1 / frequency * 1e-1,
+            #     ),
+            #     1 / frequency,
+            # )
+            # generate_square_wave(output_channel, 1, 3)
 
             time.sleep(1)
             input_channel = device.analogIn
             result = measure_voltage(
                 input_channel,
-                record_time=20 / frequency,
+                record_time=7 / frequency,
                 sampling_frequency=1000 * frequency,
                 number_of_channel=2,
             )
@@ -81,11 +83,12 @@ with openDwfDevice(
                 }
             )
             plt.plot(result["time"], result["CH1"], "k.", label="Amplified Input")
-            plt.plot(result["time"], result["CH2"], "r.", label="Peak Detector Output")
+            # plt.plot(result["time"], result["CH2"], "r.", label="Peak Detector Output")
             plt.xlabel("time [s]")
             plt.ylabel("Voltage [V]")
             plt.legend(loc="upper right")
             plt.show()
+            raise ("")
 
         df = pd.DataFrame(data_for_frequency)
         sheet_name = f"Input frequency = {frequency:.2f}Hz"
